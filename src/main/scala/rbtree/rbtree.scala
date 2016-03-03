@@ -38,8 +38,22 @@ object Incr {
     }
 }
 
+class AlmostTree[C <: Colour, N <: Nat, C1 <: Colour, C2 <: Colour, NC <: Nat, A]
+  (l: Tree[C1, NC, A], r: Tree[C2, NC, A], a: A)
+
+object AlmostTree {
+  def apply[C <: Colour] = new Partial[C]
+  class Partial[C <: Colour] {
+    def apply[C1 <: Colour, C2 <: Colour, NC <: Nat, A, N <: Nat]
+      (l: Tree[C1, NC, A], r: Tree[C2, NC, A], a: A)
+      (implicit incr: Incr.Aux[C, NC, N]) = new AlmostTree[C, N, C1, C2, NC, A](l, r, a)
+  }
+}
+
 object Demo {
   val t0 = E[Int]()
   val t1 = TB(E[Int](), E[Int](), 0)
   //val t2 = TB(t0, t1, 1)
+
+  val t3 = AlmostTree[Black.type](t0, t0, 3)
 }
